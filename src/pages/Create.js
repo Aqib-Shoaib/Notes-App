@@ -1,6 +1,17 @@
-import { Button, Container, Typography, TextField } from "@mui/material";
+import {
+  Button,
+  Container,
+  Typography,
+  TextField,
+  FormControlLabel,
+  RadioGroup,
+  Radio,
+  FormControl,
+  FormLabel,
+} from "@mui/material";
 import React, { useState } from "react";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import { useNavigate } from "react-router-dom";
 
 //the tutor taught how to style the components as you wish using makeStyled that is deprecated, but this down here
 //is the new way, you can also use "sx" prop, google it or ask CHATGPT , it will guide you, moreover,
@@ -32,6 +43,10 @@ export default function Create() {
   const [details, setDetails] = useState("");
   const [titleError, setTitleError] = useState(false);
   const [detailsError, setdetailsError] = useState(false);
+  const [category, setCategory] = useState("todos");
+
+  const navigate = useNavigate();
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setTitleError(false);
@@ -45,7 +60,13 @@ export default function Create() {
     }
 
     if (title && details) {
-      console.log(title, details);
+      fetch("http://localhost:8000/notes", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({ title, details, category }),
+      }).then(() => navigate("/"));
     }
   };
 
@@ -85,6 +106,24 @@ export default function Create() {
           className="textField"
           sx={textFieldStyles}
         />
+
+        <FormControl sx={textFieldStyles}>
+          <FormLabel>Choose a Category</FormLabel>
+          <RadioGroup
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          >
+            <FormControlLabel control={<Radio />} label="Money" value="money" />
+            <FormControlLabel control={<Radio />} label="Todos" value="todos" />
+            <FormControlLabel control={<Radio />} label="Work" value="work" />
+            <FormControlLabel
+              control={<Radio />}
+              label="Reminders"
+              value="reminders"
+            />
+          </RadioGroup>
+        </FormControl>
+
         <Button
           type="submit"
           color="secondary"
