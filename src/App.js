@@ -3,6 +3,7 @@ import Notes from "./pages/Notes";
 import Create from "./pages/Create";
 import { createTheme, ThemeProvider, CssBaseline } from "@mui/material";
 import { purple } from "@mui/material/colors";
+import AppLayout from "./components/AppLayout";
 
 const theme = createTheme({
   palette: {
@@ -26,8 +27,10 @@ function App() {
       <CssBaseline />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Notes />} />
-          <Route path="/create" element={<Create />} />
+          <Route path="/" element={<AppLayout />}>
+            <Route path="/" element={<Notes />} />
+            <Route path="/create" element={<Create />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
